@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="display"></div>
+    
+    <script>
+        const MY_SERVER = "http://127.0.0.1:8000/"
+        let products =[]
+        let cart = []
+        const load_display = async () => {
+            const res = await axios.get(MY_SERVER + "/products")
+            products = res.data
+            display.innerHTML = `<div class="row row-cols-2 row-cols-md-4 g-4">` + res.data.map((prod, idx) =>
+                `<div class="col">
+          <div class="card">
+            description: ${prod.description}
+                <img src=${prod.img}>
+                id:${prod.id}
+                category id : ${prod.category_id}
+            
+              <h5 class="card-title">Price</h5>
+              <p class="card-text">${prod.price}</p>
+              <button onClick = 'buy_prod(${idx})'> Buy</button>
+            </div>
+          </div>`) +
+                `</div>`
+        }
+        const buy_prod = (idx) =>{
+            
+            cart.push(products[idx])
+            console.log(cart)
+
+        }
+
+        load_display()
+    </script>
+    Hello
+</body>
+
+</html>
