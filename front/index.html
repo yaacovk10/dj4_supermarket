@@ -12,10 +12,10 @@
 
 <body>
     <div id="display"></div>
-    
+
     <script>
         const MY_SERVER = "http://127.0.0.1:8000/"
-        let products =[]
+        let products = []
         let cart = []
         const load_display = async () => {
             const res = await axios.get(MY_SERVER + "/products")
@@ -35,12 +35,45 @@
           </div>`) +
                 `</div>`
         }
-        const buy_prod = (idx) =>{
-            
-            cart.push(products[idx])
-            console.log(cart)
+        const buy = (ind) => {
+            product = products[ind]
+            // {id: 2, description: 'apple', price: 4, img: '/apple_kZ3Dp6C.jpg', category: 2}
+
+            // console.log(product);
+            if (cart.filter(item => item.id === product.id).length > 0) {
+                currentProduct = cart.filter(item => item.id === product.id)[0]
+                // console.log(currentProduct);
+                currentProduct.amount = parseInt(currentProduct.amount) + 1
+            }
+            else {
+                cart.push({ id: product.id, description: product.description, price: product.price, img: product.img, category: product.category, amount: 1 })
+            }
+            // console.table(cart);
+            localStorage.setItem('cart', JSON.stringify(cart))
+            myCart.innerHTML = `<div class="row row-cols-1 row-cols-md-5 g-2">` + cart.map((prod, ind) => `
+            <div class="col">
+            <div class="card">
+            <img src=${prod.img} class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">${prod.price}</h5>
+              <p class="card-text">${prod.description}, amount ${prod.amount}</p>
+            </div>
+            </div>
+            </div>
+          `)
+            myCart.innerHTML += "</div>"
+
 
         }
+        const loadData = () => {
+            temp = localStorage.getItem('cart')
+            if (temp === null) {
+                console.log("storage empty");
+            } else {
+                cart = JSON.parse(localStorage.getItem('cart'))
+            }
+        }
+
 
         load_display()
     </script>
